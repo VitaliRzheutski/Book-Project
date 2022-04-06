@@ -19,7 +19,8 @@ function App() {
     event.preventDefault();
     getAllBooks();
   };
-
+  console.log("books:", books.items);
+  let booksArr = books.items;
   return (
     <section>
       <form onSubmit={handleSubmit}>
@@ -34,6 +35,22 @@ function App() {
           <button type="submit">Search</button>
         </label>
       </form>
+      <ul>
+        {booksArr.map((book, id) => {
+          return (
+            <div key={id}>
+              <img
+                alt={book.volumeInfo.title}
+                src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+              />
+              <div>
+                <h3>{book.volumeInfo.title}</h3>
+                <p>{book.volumeInfo.publishedDate}</p>
+              </div>
+            </div>
+          );
+        })}
+      </ul>
     </section>
   );
 }
