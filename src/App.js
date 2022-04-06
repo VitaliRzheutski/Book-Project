@@ -15,12 +15,14 @@ function App() {
     const result = await axios.get(`${URL_API}?q=${searchTerm}`);
     setBooks(result.data);
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     getAllBooks();
   };
-  console.log("books:", books.items);
+
   let booksArr = books.items;
+  console.log("books:", booksArr);
   return (
     <section>
       <form onSubmit={handleSubmit}>
@@ -37,6 +39,16 @@ function App() {
       </form>
       <ul>
         {booksArr.map((book, id) => {
+          console.log("single book", book.saleInfo);
+          const bookPrice = book.saleInfo.listPrice
+            ? book.saleInfo.listPrice.amount +
+              book.saleInfo.listPrice.currencyCode
+            : null;
+          const pages = book.volumeInfo.pageCount;
+          const tittle = book.volumeInfo.title;
+          const publishedDate = book.volumeInfo.publishedDate;
+          const categories = book.volumeInfo.categories;
+          console.log("categories:", categories);
           return (
             <div key={id}>
               <img
@@ -44,8 +56,15 @@ function App() {
                 src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
               />
               <div>
-                <h3>{book.volumeInfo.title}</h3>
-                <p>{book.volumeInfo.publishedDate}</p>
+                <h3>{tittle}</h3>
+                <p>Price: {bookPrice}</p>
+                <p>Pages: {pages}</p>
+                <p>
+                  {categories.map((category) => {
+                    return <p>Categories: {category}</p>;
+                  })}
+                </p>
+                <p>Published:{publishedDate}</p>
               </div>
             </div>
           );
