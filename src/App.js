@@ -13,11 +13,16 @@ function App() {
 
   const getAllBooks = async () => {
     const result = await axios.get(`${URL_API}?q=${searchTerm}`);
+    setBooks(result.data);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    getAllBooks();
   };
 
   return (
     <section>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label>
           <span>Search for books</span>
           <input
