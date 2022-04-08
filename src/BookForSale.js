@@ -3,16 +3,19 @@ import React, { useState } from "react";
 const BooksForSale = (props) => {
   let booksForSale = props.booksForSale;
 
-  const [isFilteredLowHigh, setFilterLowHeigh] = useState(false);
+  const [isFilteredLowHight, setFilterLowHeight] = useState(false);
 
-  let filteredBooksByPricesLowToHigh = booksForSale.sort(
-    (book1, book2) =>
-      book1.saleInfo.listPrice.amount < book2.saleInfo.listPrice.amount
+  let filteredBooksByPricesLowToHigh = [...booksForSale].sort(
+    (book1, book2) => {
+      return book1.saleInfo.listPrice.amount - book2.saleInfo.listPrice.amount;
+    }
   );
 
-  let filteredBooksByPricesHighToLow = booksForSale.sort((book1, book2) => {
-    return book2.saleInfo.listPrice.amount - book1.saleInfo.listPrice.amount;
-  });
+  let filteredBooksByPricesHighToLow = [...booksForSale].sort(
+    (book1, book2) => {
+      return book2.saleInfo.listPrice.amount - book1.saleInfo.listPrice.amount;
+    }
+  );
 
   const renderAllBooks = (filteredBooks) => {
     return (
@@ -64,17 +67,17 @@ const BooksForSale = (props) => {
       <button
         type="submit"
         onClick={() => {
-          setFilterLowHeigh(true);
+          setFilterLowHeight(true);
         }}
       >
         Filter by price Low - High
       </button>
 
-      <button type="submit" onClick={() => setFilterLowHeigh(false)}>
+      <button type="submit" onClick={() => setFilterLowHeight(false)}>
         Filter by price High - Low
       </button>
 
-      {isFilteredLowHigh === true
+      {isFilteredLowHight
         ? renderAllBooks(filteredBooksByPricesLowToHigh)
         : renderAllBooks(filteredBooksByPricesHighToLow)}
     </div>
