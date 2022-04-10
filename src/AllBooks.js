@@ -1,13 +1,47 @@
 import React, { useState } from "react";
 import BooksForSale from "./BookForSale";
 // import { Button } from "@mui/material";
+import FilterByCategory from "./FilterByCategory";
 
 const AllBooks = (props) => {
   const [isForSale, setForSale] = useState(false);
+  const [isFilteredByCategory, setFilteredByCategory] = useState(false);
+  const [selectedOption, setOption] = useState("All");
+  const categoriesObj = {};
+  const booksArr = props.books;
+  const [allBooks, filterBooksByPageCount] = useState(booksArr);
+  const firstRange = booksArr.filter(
+    (book) => book.volumeInfo.pageCount > 0 && book.volumeInfo.pageCount <= 100
+  );
+  const secondRange = booksArr.filter(
+    (book) =>
+      book.volumeInfo.pageCount > 101 && book.volumeInfo.pageCount <= 200
+  );
+  const thirdRange = booksArr.filter(
+    (book) =>
+      book.volumeInfo.pageCount > 201 && book.volumeInfo.pageCount <= 300
+  );
+  const fourthRange = booksArr.filter(
+    (book) =>
+      book.volumeInfo.pageCount > 301 && book.volumeInfo.pageCount <= 400
+  );
 
-  let booksArr = props.books;
+  const handleOptionChange = (changeEvent) => {
+    if (changeEvent.target.value === "All") {
+      filterBooksByPageCount(booksArr);
+    } else if (changeEvent.target.value === "0-100 pages") {
+      filterBooksByPageCount(firstRange);
+    } else if (changeEvent.target.value === "101-200 pages") {
+      filterBooksByPageCount(secondRange);
+    } else if (changeEvent.target.value === "201-300 pages") {
+      filterBooksByPageCount(thirdRange);
+    } else if (changeEvent.target.value === "301-500 pages") {
+      filterBooksByPageCount(fourthRange);
+    }
+    return setOption(changeEvent.target.value);
+  };
 
-  let booksForSale = booksArr.filter(
+  const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
   );
 
@@ -20,11 +54,71 @@ const AllBooks = (props) => {
       <button type="submit" onClick={() => setForSale(true)}>
         Books for sale
       </button>
+
+      <button type="submit">Filter by category</button>
+
+      <div className="filterByPage">
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="All"
+              checked={selectedOption === "All"}
+              onChange={handleOptionChange}
+            />
+            All
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="0-100 pages"
+              checked={selectedOption === "0-100 pages"}
+              onChange={handleOptionChange}
+            />
+            0-100 pages
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="101-200 pages"
+              checked={selectedOption === "101-200 pages"}
+              onChange={handleOptionChange}
+            />
+            101-200 pages
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="201-300 pages"
+              checked={selectedOption === "201-300 pages"}
+              onChange={handleOptionChange}
+            />
+            201-300 pages
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="radio"
+              value="301-500 pages"
+              checked={selectedOption === "301-500 pages"}
+              onChange={handleOptionChange}
+            />
+            301-500 pages
+          </label>
+        </div>
+      </div>
       <ul>
         {isForSale ? (
           <BooksForSale booksForSale={booksForSale} />
         ) : (
-          booksArr.map((book, id) => {
+          allBooks.map((book, id) => {
             const bookPrice = book.saleInfo.listPrice
               ? book.saleInfo.listPrice.amount +
                 book.saleInfo.listPrice.currencyCode
@@ -45,8 +139,20 @@ const AllBooks = (props) => {
                   {bookPrice ? <p>Price: {bookPrice}</p> : null}
                   <p>Pages: {pages}</p>
                   <div></div>
-
                   <p>Published:{publishedDate}</p>
+
+                  <div>
+                    {categories
+                      ? categories.map((category) => {
+                          if (!categoriesObj[category]) {
+                            categoriesObj[category] = [book];
+                          } else {
+                            categoriesObj[category].push(book);
+                          }
+                          return <p key={id}>Categories: {category}</p>;
+                        })
+                      : null}
+                  </div>
                 </div>
               </div>
             );
