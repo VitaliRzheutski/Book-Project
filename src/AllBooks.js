@@ -40,10 +40,23 @@ const AllBooks = (props) => {
     }
     return setOption(changeEvent.target.value);
   };
-
+  console.log("allbooks", allBooks);
   const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
   );
+
+  //reconstruct to reduce
+  let categories = allBooks.map((book) => {
+    let category = book.volumeInfo.categories ? book.volumeInfo.categories : [];
+    for (let c of category) {
+      if (!categoriesObj[c]) {
+        categoriesObj[category] = [book];
+      } else {
+        categoriesObj[category].push(book);
+      }
+    }
+  });
+  console.log("obkj", categoriesObj);
 
   return (
     <div>
@@ -55,7 +68,9 @@ const AllBooks = (props) => {
         Books for sale
       </button>
 
-      <button type="submit">Filter by category</button>
+      <button type="submit" onClick={() => setFilteredByCategory(true)}>
+        Filter by category{" "}
+      </button>
 
       <div className="filterByPage">
         <div>
@@ -117,6 +132,8 @@ const AllBooks = (props) => {
       <ul>
         {isForSale ? (
           <BooksForSale booksForSale={booksForSale} />
+        ) : isFilteredByCategory ? (
+          <FilterByCategory categoriesObj={categoriesObj} />
         ) : (
           allBooks.map((book, id) => {
             const bookPrice = book.saleInfo.listPrice
@@ -129,7 +146,7 @@ const AllBooks = (props) => {
             let categories = book.volumeInfo.categories;
 
             return (
-              <div key={id}>
+              <div key={book.id}>
                 <img
                   alt={book.volumeInfo.title}
                   src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
@@ -144,11 +161,6 @@ const AllBooks = (props) => {
                   <div>
                     {categories
                       ? categories.map((category) => {
-                          if (!categoriesObj[category]) {
-                            categoriesObj[category] = [book];
-                          } else {
-                            categoriesObj[category].push(book);
-                          }
                           return <p key={id}>Categories: {category}</p>;
                         })
                       : null}

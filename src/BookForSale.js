@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const BooksForSale = (props) => {
   let booksForSale = props.booksForSale;
+  //   let categoriesObj = {};
 
   const [isFilteredLowHight, setFilterLowHeight] = useState(false);
 
@@ -40,19 +41,20 @@ const BooksForSale = (props) => {
                 <h3>{tittle}</h3>
                 {bookPrice ? <p>Price: {bookPrice}</p> : null}
                 <p>Pages: {pages}</p>
-                <div>
-                  {/* {categories
-              ? categories.map((category) => {
-                  if (!categoriesObj[category]) {
-                    categoriesObj[category] = [book];
-                  } else {
-                    categoriesObj[category].push(book);
-                  }
-                  console.log("categoriesObj:", categoriesObj);
-                  return <p key={id}>Categories: {category}</p>;
-                })
-              : null} */}
-                </div>
+                <p key={id}>Categories: {categories}</p>
+                {/* <div>
+                  {categories
+                    ? categories.map((category) => {
+                        if (!categoriesObj[category]) {
+                          categoriesObj[category] = [book];
+                        } else {
+                          categoriesObj[category].push(book);
+                        }
+                        console.log("categoriesObj:", categoriesObj);
+                        return <p key={id}>Categories: {category}</p>;
+                      })
+                    : null}
+                </div> */}
 
                 <p>Published:{publishedDate}</p>
               </div>
