@@ -11,6 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+* {
+  box-sizing: border-box;
+  /* font-family: arial, sans-serif; */
+}
+.searchForBooks {
+  height: 100px;
+  text-align: center;
+  margin-top: 25px;
+  font-size: 30px;
+
+}
 .sortByCategory{
   border: 1px solid black;
+}
+section h1{
+  text-align: center;
+  margin-top: 40px;
+}
+.searchBlock button{
+  margin-left: 50px;
+}
+#outlined-basic{
+  width: 300px;
 }

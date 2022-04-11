@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import axios from "axios";
 import AllBooks from "./AllBooks";
-// import { Button } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,16 +27,21 @@ function App() {
 
   return (
     <section>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <span>Search for books</span>
-          <input
+      <h1>Search for books</h1>
+      <form onSubmit={handleSubmit} className="searchForBooks">
+        <label className="searchBlock">
+          <TextField
             type="search"
             placeholder="Search for books..."
             value={searchTerm}
             onChange={handleChange}
+            id="outlined-basic"
+            variant="outlined"
+            size="small"
           />
-          <button type="submit">Search</button>
+          <Button type="input" variant="contained" size="large">
+            Search
+          </Button>
         </label>
       </form>
 

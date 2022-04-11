@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import BooksForSale from "./BookForSale";
-// import { Button } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import FilterByCategory from "./FilterByCategory";
 
 const AllBooks = (props) => {
@@ -40,6 +46,7 @@ const AllBooks = (props) => {
     }
     return setOption(changeEvent.target.value);
   };
+
   console.log("allbooks", allBooks);
   const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
@@ -60,75 +67,81 @@ const AllBooks = (props) => {
 
   return (
     <div>
-      <button type="submit" onClick={() => setForSale(false)}>
+      <Button
+        type="input"
+        variant="contained"
+        size="small"
+        onClick={() => setForSale(false)}
+      >
         All books
-      </button>
+      </Button>
 
-      <button type="submit" onClick={() => setForSale(true)}>
+      <Button
+        type="submit"
+        variant="contained"
+        size="small"
+        onClick={() => setForSale(true)}
+      >
         Books for sale
-      </button>
+      </Button>
 
-      <button type="submit" onClick={() => setFilteredByCategory(true)}>
+      <Button
+        type="submit"
+        variant="contained"
+        size="small"
+        onClick={() => setFilteredByCategory(true)}
+      >
         Filter by category{" "}
-      </button>
+      </Button>
 
-      <div className="filterByPage">
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="All"
-              checked={selectedOption === "All"}
-              onChange={handleOptionChange}
-            />
+      <FormControl sx={{ minWidth: 150 }}>
+        <InputLabel id="demo-simple-select-label">Filter by Page</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="Filter by pages"
+          value={selectedOption}
+          onChange={handleOptionChange}
+        >
+          <MenuItem
+            value="All"
+            checked={selectedOption === "All"}
+            onChange={handleOptionChange}
+          >
             All
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="0-100 pages"
-              checked={selectedOption === "0-100 pages"}
-              onChange={handleOptionChange}
-            />
+          </MenuItem>
+
+          <MenuItem
+            value="0-100 pages"
+            checked={selectedOption === "0-100 pages"}
+            onChange={handleOptionChange}
+          >
             0-100 pages
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="101-200 pages"
-              checked={selectedOption === "101-200 pages"}
-              onChange={handleOptionChange}
-            />
+          </MenuItem>
+          <MenuItem
+            value="101-200 pages"
+            checked={selectedOption === "101-200 pages"}
+            onChange={handleOptionChange}
+          >
             101-200 pages
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="201-300 pages"
-              checked={selectedOption === "201-300 pages"}
-              onChange={handleOptionChange}
-            />
+          </MenuItem>
+          <MenuItem
+            value="201-300 pages"
+            checked={selectedOption === "201-300 pages"}
+            onChange={handleOptionChange}
+          >
             201-300 pages
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="radio"
-              value="301-500 pages"
-              checked={selectedOption === "301-500 pages"}
-              onChange={handleOptionChange}
-            />
+          </MenuItem>
+          <MenuItem
+            value="301-500 pages"
+            checked={selectedOption === "301-500 pages"}
+            onChange={handleOptionChange}
+          >
             301-500 pages
-          </label>
-        </div>
-      </div>
+          </MenuItem>
+        </Select>
+      </FormControl>
+
       <ul>
         {isForSale ? (
           <BooksForSale booksForSale={booksForSale} />
