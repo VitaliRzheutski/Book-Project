@@ -19,6 +19,8 @@ const AllBooks = (props) => {
   const [selectedOption, setOption] = useState("All");
   const categoriesObj = {};
   const booksArr = props.books;
+  let booksLength = booksArr.length;
+  console.log("!:", booksLength);
   const [allBooks, filterBooksByPageCount] = useState(booksArr);
   const firstRange = booksArr.filter(
     (book) => book.volumeInfo.pageCount > 0 && book.volumeInfo.pageCount <= 100
@@ -51,7 +53,6 @@ const AllBooks = (props) => {
     return setOption(changeEvent.target.value);
   };
 
-  console.log("allbooks", allBooks);
   const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
   );
@@ -67,29 +68,34 @@ const AllBooks = (props) => {
       }
     }
   });
-  console.log("obkj", categoriesObj);
 
   return (
     <div className="wrapper">
+      {/* <h1>{booksLength} books matched in your search</h1> */}
+
       <div className="buttons">
-        <Button
-          type="input"
-          variant="contained"
-          size="small"
-          onClick={() => setForSale(false)}
-        >
-          All books
-        </Button>
-
-        <Button
-          type="submit"
-          variant="contained"
-          size="small"
-          onClick={() => setForSale(true)}
-        >
-          Books for sale
-        </Button>
-
+        <div className="allBooksButton">
+          <Button
+            type="input"
+            variant="contained"
+            size="small"
+            onClick={() => setForSale(false)}
+          >
+            All books
+          </Button>
+        </div>
+        <div className="forSaleBooksButton">
+          <Button
+            type="submit"
+            variant="contained"
+            size="small"
+            onClick={() => setForSale(true)}
+          >
+            Books for sale
+          </Button>
+        </div>
+      </div>
+      <div className="filterByCategoryButton">
         <Button
           type="submit"
           variant="contained"
@@ -99,8 +105,7 @@ const AllBooks = (props) => {
           Filter by category{" "}
         </Button>
       </div>
-
-      <div>
+      <div className="filterByPageDropDown">
         <FormControl sx={{ minWidth: 150 }}>
           <InputLabel id="demo-simple-select-label">Filter by Page</InputLabel>
           <Select
@@ -148,7 +153,7 @@ const AllBooks = (props) => {
             </MenuItem>
           </Select>
         </FormControl>
-
+        <h1>{booksLength} books matched in your search</h1>
         <div>
           <ul className="allBooks">
             {isForSale ? (
@@ -167,28 +172,6 @@ const AllBooks = (props) => {
                 let categories = book.volumeInfo.categories;
 
                 return (
-                  // <div key={book.id}>
-                  //   <img
-                  //     alt={book.volumeInfo.title}
-                  //     src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-                  //   />
-                  //   <div>
-                  //     <h3>{tittle}</h3>
-                  //     {bookPrice ? <p>Price: {bookPrice}</p> : null}
-                  //     <p>Pages: {pages}</p>
-                  //     <div></div>
-                  //     <p>Published:{publishedDate}</p>
-
-                  // <div>
-                  //   {categories
-                  //     ? categories.map((category) => {
-                  //         return <p key={id}>Categories: {category}</p>;
-                  //       })
-                  //     : null}
-                  // </div>
-                  //   </div>
-                  // </div>
-
                   <div container className="containerForBooks">
                     <Card sx={{ maxWidth: 345 }} className="singleBook">
                       <CardMedia
