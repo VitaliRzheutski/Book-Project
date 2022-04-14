@@ -164,7 +164,7 @@ const AllBooks = (props) => {
             </MenuItem>
           </Select>
         </FormControl>
-        <h1>There are {booksLength} books matched in your search</h1>
+        <h1>There are {booksLength} books that matched your search</h1>
         <div>
           <ul className="allBooks">
             {isForSale ? (
