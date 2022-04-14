@@ -12,7 +12,6 @@ export const renderBooks = (
       ? book.saleInfo.listPrice.amount + book.saleInfo.listPrice.currencyCode
       : null;
     const pages = book.volumeInfo.pageCount;
-    const tittle = book.volumeInfo.title;
     const publishedDate = book.volumeInfo.publishedDate;
     let categories = book.volumeInfo.categories;
 
@@ -35,7 +34,7 @@ export const renderBooks = (
               <p key={id}>Categories: {categories}</p>
               <p>Published:{publishedDate}</p>
               {categories
-                ? categories.map((category) => {
+                ? categories.map((category, id) => {
                     return <p key={id}>Categories: {category}</p>;
                   })
                 : null}

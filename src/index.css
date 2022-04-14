@@ -84,11 +84,17 @@ section h1{
   margin-left: 20px;
 }
 .pagination{
-  /* display: flex; */
   display: inline-block;
  
 }
 .pagination a{
   margin-right: 10px;
   text-decoration: none;
+  color:grey
 }
+.pagination a:hover {
+  background-color: #ddd;
+  border-radius:10px;
+  color: red;
+}
+

@@ -33,12 +33,11 @@ const BooksForSale = (props) => {
               book.saleInfo.listPrice.currencyCode
             : null;
           const pages = book.volumeInfo.pageCount;
-          const tittle = book.volumeInfo.title;
           const publishedDate = book.volumeInfo.publishedDate;
           const categories = book.volumeInfo.categories;
 
           return (
-            <div container className="containerForBooks">
+            <div container className="containerForBooks" key={id}>
               <Card sx={{ maxWidth: 345 }} className="singleBook">
                 <CardMedia
                   component="img"

@@ -23,7 +23,6 @@ const AllBooks = (props) => {
   const booksArr = props.books;
   let booksLength = booksArr.length;
 
-  // get curent books
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   let currentPosts = booksArr.slice(indexOfFirstPost, indexOfLastPost);
@@ -75,7 +74,6 @@ const AllBooks = (props) => {
     }
   });
 
-  //changePage
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -115,7 +113,7 @@ const AllBooks = (props) => {
           size="small"
           onClick={() => setFilteredByCategory(true)}
         >
-          Filter by category{" "}
+          Filter all books by category
         </Button>
       </div>
       <div className="filterByPageDropDown">
@@ -166,7 +164,7 @@ const AllBooks = (props) => {
             </MenuItem>
           </Select>
         </FormControl>
-        <h1>{booksLength} books matched in your search</h1>
+        <h1>There are {booksLength} books matched in your search</h1>
         <div>
           <ul className="allBooks">
             {isForSale ? (
