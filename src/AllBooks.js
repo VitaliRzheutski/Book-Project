@@ -6,41 +6,48 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
 } from "@mui/material";
 import FilterByCategory from "./FilterByCategory";
+import PaginationList from "./Pagination";
+import { renderBooks } from "./helpers";
 
 const AllBooks = (props) => {
   const [isForSale, setForSale] = useState(false);
   const [isFilteredByCategory, setFilteredByCategory] = useState(false);
   const [selectedOption, setOption] = useState("All");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFilteredByPageCount, setToFilteredByPageCount] = useState(false);
+  const [postsPerPage] = useState(4);
   const categoriesObj = {};
   const booksArr = props.books;
   let booksLength = booksArr.length;
-  console.log("!:", booksLength);
-  const [allBooks, filterBooksByPageCount] = useState(booksArr);
-  const firstRange = booksArr.filter(
+
+  // get curent books
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  let currentPosts = booksArr.slice(indexOfFirstPost, indexOfLastPost);
+  const [allBooks, filterBooksByPageCount] = useState(currentPosts);
+
+  const firstRange = currentPosts.filter(
     (book) => book.volumeInfo.pageCount > 0 && book.volumeInfo.pageCount <= 100
   );
-  const secondRange = booksArr.filter(
+  const secondRange = currentPosts.filter(
     (book) =>
       book.volumeInfo.pageCount > 101 && book.volumeInfo.pageCount <= 200
   );
-  const thirdRange = booksArr.filter(
+  const thirdRange = currentPosts.filter(
     (book) =>
       book.volumeInfo.pageCount > 201 && book.volumeInfo.pageCount <= 300
   );
-  const fourthRange = booksArr.filter(
+  const fourthRange = currentPosts.filter(
     (book) =>
       book.volumeInfo.pageCount > 301 && book.volumeInfo.pageCount <= 400
   );
 
   const handleOptionChange = (changeEvent) => {
     if (changeEvent.target.value === "All") {
-      filterBooksByPageCount(booksArr);
+      filterBooksByPageCount(currentPosts);
     } else if (changeEvent.target.value === "0-100 pages") {
       filterBooksByPageCount(firstRange);
     } else if (changeEvent.target.value === "101-200 pages") {
@@ -50,15 +57,33 @@ const AllBooks = (props) => {
     } else if (changeEvent.target.value === "301-500 pages") {
       filterBooksByPageCount(fourthRange);
     }
+    setToFilteredByPageCount(true);
     return setOption(changeEvent.target.value);
   };
-
+  console.log("currentPost after Filter by page count", currentPosts);
   const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
   );
 
   //reconstruct to reduce
-  let categories = allBooks.map((book) => {
+  // let a = allBooks
+  //   ? allBooks.reduce((resObj, current) => {
+  //       console.log("prev", resObj);
+  //       console.log("current", current);
+  //       let category = current.volumeInfo.categories
+  //         ? current.volumeInfo.categories
+  //         : [];
+  //       console.log("category", category);
+  //       if (!resObj[category]) {
+  //         resObj[category] = [current];
+  //       } else {
+  //         resObj[category].push(current);
+  //       }
+  //     }, {})
+  //   : {};
+  // console.log("reduce obj", a);
+
+  allBooks.forEach((book) => {
     let category = book.volumeInfo.categories ? book.volumeInfo.categories : [];
     for (let c of category) {
       if (!categoriesObj[c]) {
@@ -69,17 +94,24 @@ const AllBooks = (props) => {
     }
   });
 
+  //changePage
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="wrapper">
-      {/* <h1>{booksLength} books matched in your search</h1> */}
-
       <div className="buttons">
         <div className="allBooksButton">
           <Button
             type="input"
             variant="contained"
             size="small"
-            onClick={() => setForSale(false)}
+            onClick={() => {
+              setFilteredByCategory(false);
+              filterBooksByPageCount(currentPosts);
+              return setForSale(false);
+            }}
           >
             All books
           </Button>
@@ -161,48 +193,15 @@ const AllBooks = (props) => {
             ) : isFilteredByCategory ? (
               <FilterByCategory categoriesObj={categoriesObj} />
             ) : (
-              allBooks.map((book, id) => {
-                const bookPrice = book.saleInfo.listPrice
-                  ? book.saleInfo.listPrice.amount +
-                    book.saleInfo.listPrice.currencyCode
-                  : null;
-                const pages = book.volumeInfo.pageCount;
-                const tittle = book.volumeInfo.title;
-                const publishedDate = book.volumeInfo.publishedDate;
-                let categories = book.volumeInfo.categories;
-
-                return (
-                  <div container className="containerForBooks">
-                    <Card sx={{ maxWidth: 345 }} className="singleBook">
-                      <CardMedia
-                        component="img"
-                        height="230"
-                        src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-                        alt={book.volumeInfo.title}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {book.volumeInfo.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {bookPrice ? <p>Price: {bookPrice}</p> : null}
-                          <p>Pages: {pages}</p>
-                          <p key={id}>Categories: {categories}</p>
-                          <p>Published:{publishedDate}</p>
-                          {categories
-                            ? categories.map((category) => {
-                                return <p key={id}>Categories: {category}</p>;
-                              })
-                            : null}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </div>
-                );
-              })
+              renderBooks(currentPosts, allBooks, isFilteredByPageCount)
             )}
           </ul>
         </div>
+        <PaginationList
+          postsPerPage={postsPerPage}
+          totalPosts={booksArr.length}
+          paginate={paginate}
+        />
       </div>
     </div>
   );

@@ -1,8 +1,15 @@
 import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+} from "@mui/material";
 
 const BooksForSale = (props) => {
   let booksForSale = props.booksForSale;
-  //   let categoriesObj = {};
 
   const [isFilteredLowHight, setFilterLowHeight] = useState(false);
 
@@ -32,32 +39,31 @@ const BooksForSale = (props) => {
           const categories = book.volumeInfo.categories;
 
           return (
-            <div key={id}>
-              <img
-                alt={book.volumeInfo.title}
-                src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
-              />
-              <div>
-                <h3>{tittle}</h3>
-                {bookPrice ? <p>Price: {bookPrice}</p> : null}
-                <p>Pages: {pages}</p>
-                <p key={id}>Categories: {categories}</p>
-                {/* <div>
-                  {categories
-                    ? categories.map((category) => {
-                        if (!categoriesObj[category]) {
-                          categoriesObj[category] = [book];
-                        } else {
-                          categoriesObj[category].push(book);
-                        }
-                        console.log("categoriesObj:", categoriesObj);
-                        return <p key={id}>Categories: {category}</p>;
-                      })
-                    : null}
-                </div> */}
-
-                <p>Published:{publishedDate}</p>
-              </div>
+            <div container className="containerForBooks">
+              <Card sx={{ maxWidth: 345 }} className="singleBook">
+                <CardMedia
+                  component="img"
+                  height="230"
+                  src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`}
+                  alt={book.volumeInfo.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {book.volumeInfo.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {bookPrice ? <p>Price: {bookPrice}</p> : null}
+                    <p>Pages: {pages}</p>
+                    <p key={id}>Categories: {categories}</p>
+                    <p>Published:{publishedDate}</p>
+                    {categories
+                      ? categories.map((category) => {
+                          return <p key={id}>Categories: {category}</p>;
+                        })
+                      : null}
+                  </Typography>
+                </CardContent>
+              </Card>
             </div>
           );
         })}
@@ -65,19 +71,24 @@ const BooksForSale = (props) => {
     );
   };
   return (
-    <div>
-      <button
-        type="submit"
-        onClick={() => {
-          setFilterLowHeight(true);
-        }}
+    <div className="filterByPriceButtons">
+      <Button
+        type="input"
+        variant="contained"
+        size="small"
+        onClick={() => setFilterLowHeight(true)}
       >
         Filter by price Low - High
-      </button>
-
-      <button type="submit" onClick={() => setFilterLowHeight(false)}>
+      </Button>
+      <Button
+        id="heightToLowButton"
+        type="input"
+        variant="contained"
+        size="small"
+        onClick={() => setFilterLowHeight(false)}
+      >
         Filter by price High - Low
-      </button>
+      </Button>
 
       {isFilteredLowHight
         ? renderAllBooks(filteredBooksByPricesLowToHigh)
