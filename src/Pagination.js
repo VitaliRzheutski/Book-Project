@@ -1,10 +1,7 @@
 import React from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
 
 const PaginationList = ({ postsPerPage, totalPosts, paginate }) => {
   const pageNumbers = [];
-  console.log("totalPosts", totalPosts);
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
   }

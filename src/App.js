@@ -4,11 +4,8 @@ import axios from "axios";
 import AllBooks from "./AllBooks";
 import { Button, TextField } from "@mui/material";
 import { readFromCache, writeToCache } from "./cache";
-import PaginationList from "./Pagination";
 
-// function App() {
-function App({ useCache }) {
-  // console.log("useCache", { useCache });
+function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [books, setBooks] = useState({ items: [] });
   let URL_API = "https://www.googleapis.com/books/v1/volumes";
@@ -26,18 +23,22 @@ function App({ useCache }) {
   };
 
   const getCachedData = (searchTerm) => readFromCache(searchTerm);
+
   const getAllBooks = async () => {
-    setBooks({ items: [] }); //might come back
-    if (useCache) {
-      const cachedBooks = getCachedData(searchTerm);
+    setBooks({ items: [] });
+    const cachedBooks = getCachedData(searchTerm);
+    if (localStorage.length < 10) {
       if (cachedBooks) {
-        console.log("!!!!");
         setBooks(cachedBooks);
+      } else {
+        const result = await getFreshData(URL_API, true, searchTerm);
+        setBooks(result);
       }
     } else {
-      const result = await getFreshData(URL_API, true, searchTerm);
-      console.log("!result books from api", result);
-      setBooks(result);
+      const { data } = await axios.get(
+        `${URL_API}?q=${searchTerm}&maxResults=40`
+      );
+      setBooks(data);
     }
   };
 

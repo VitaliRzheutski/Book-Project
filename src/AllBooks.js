@@ -60,28 +60,9 @@ const AllBooks = (props) => {
     setToFilteredByPageCount(true);
     return setOption(changeEvent.target.value);
   };
-  console.log("currentPost after Filter by page count", currentPosts);
   const booksForSale = allBooks.filter(
     (book) => book.saleInfo.saleability === "FOR_SALE"
   );
-
-  //reconstruct to reduce
-  // let a = allBooks
-  //   ? allBooks.reduce((resObj, current) => {
-  //       console.log("prev", resObj);
-  //       console.log("current", current);
-  //       let category = current.volumeInfo.categories
-  //         ? current.volumeInfo.categories
-  //         : [];
-  //       console.log("category", category);
-  //       if (!resObj[category]) {
-  //         resObj[category] = [current];
-  //       } else {
-  //         resObj[category].push(current);
-  //       }
-  //     }, {})
-  //   : {};
-  // console.log("reduce obj", a);
 
   allBooks.forEach((book) => {
     let category = book.volumeInfo.categories ? book.volumeInfo.categories : [];
